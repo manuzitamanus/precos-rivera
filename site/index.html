@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preços Rivera</title>
+  <meta name="description" content="Compare preços dos free shops de Rivera, Uruguai">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo__barra">
+      <a class="marca" href="./" aria-label="Preços Rivera, início">
+        <span class="marca__icone" aria-hidden="true">R</span>
+        <span class="marca__texto">Preços <b>Rivera</b></span>
+      </a>
+      <div class="busca">
+        <svg class="busca__icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input id="busca" type="search" placeholder="Buscar produto ou marca" autocomplete="off" aria-label="Buscar produto ou marca">
+      </div>
+      <button id="abrir-lista" class="botao-lista" type="button" aria-label="Abrir minha lista">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+        <span class="botao-lista__texto">Minha lista</span>
+        <span id="lista-contador" class="contador">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="faixa" aria-label="Informações">
+    <div class="faixa__conteudo">
+      <h1>Compare os preços dos free shops de Rivera</h1>
+      <div class="pilulas" id="info"></div>
+    </div>
+  </section>
+
+  <nav class="categorias" aria-label="Categorias">
+    <div id="categorias" class="categorias__trilho"></div>
+  </nav>
+
+  <main>
+    <div class="controles">
+      <div class="abas" role="tablist" aria-label="Loja" id="abas-loja"></div>
+      <label class="ordem">
+        <span>Ordenar</span>
+        <select id="ordem">
+          <option value="relevancia">Relevância</option>
+          <option value="menor">Menor preço</option>
+          <option value="maior">Maior preço</option>
+          <option value="economia">Maior economia</option>
+          <option value="queda">Baixaram de preço</option>
+        </select>
+      </label>
+    </div>
+    <p id="resumo" class="resumo" aria-live="polite"></p>
+    <div id="grade" class="grade"></div>
+    <div class="mais"><button id="carregar-mais" class="botao" type="button" hidden>Mostrar mais produtos</button></div>
+  </main>
+
+  <footer class="rodape">
+    <p>Preços coletados dos sites das lojas e convertidos pelo dólar comercial. Podem ser diferentes na loja física — confirme antes de comprar.</p>
+    <p>Cota de isenção para compras trazidas por via terrestre: US$ 500 por pessoa (confira as regras atuais na Receita Federal).</p>
+  </footer>
+
+  <dialog id="detalhe" class="detalhe"></dialog>
+
+  <div id="fundo-lista" class="fundo-lista" hidden></div>
+  <aside id="lista" class="lista" aria-label="Minha lista" hidden>
+    <div class="lista__topo">
+      <h2>Minha lista</h2>
+      <button id="fechar-lista" class="botao-icone" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div id="lista-itens" class="lista__itens"></div>
+    <div id="lista-total" class="lista__total"></div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
