@@ -1,0 +1,70 @@
+# Roda todo dia: coleta os preços de todas as lojas, lê a planilha manual,
+# guarda o histórico no repositório e publica o site no GitHub Pages.
+name: Coletar preços e publicar site
+
+on:
+  schedule:
+    - cron: "0 9 * * *" # todo dia às 6h (horário do Uruguai e de Brasília)
+  workflow_dispatch: # botão "Run workflow" para rodar na hora
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "coletor/**"
+      - "dados/precos-manuais.csv"
+      - "dados/config.json"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: coleta
+  cancel-in-progress: false
+
+env:
+  TZ: America/Montevideo
+
+jobs:
+  coletar-e-publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Coletar preços de todas as lojas
+        if: github.event_name != 'push'
+        run: python3 coletor/coletar.py
+
+      - name: Só atualizar a planilha manual (mudança no código ou na planilha)
+        if: github.event_name == 'push'
+        run: python3 coletor/coletar.py --loja brasil
+
+      - name: Guardar histórico no repositório
+        run: |
+          git config user.name "coletor-precos-rivera"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dados/historico.json site/dados.json
+          if git diff --cached --quiet; then
+            echo "Nada mudou."
+          else
+            git commit -m "Preços de $(date +%F)"
+            git push
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: publicar
+        uses: actions/deploy-pages@v4
